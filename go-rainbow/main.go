@@ -132,107 +132,14 @@ func main() {
 	if bcyanFlag != nil {
 		apf = append(apf, patternFunc{*bcyanFlag, ansicolor.BCyan})
 	}
-	/*
-		if templateFlag != nil {
-			var fi *os.File
-			if _, err := os.Stat(*templateFlag); os.IsNotExist(err) {
-				fi, err = os.Open(*templateFlag)
-				if err != nil {
-					panic(err)
-				}
-
-			}
-			// close fi on exit and check for its returned error
-			defer func() {
-				if err := fi.Close(); err != nil {
-					panic(err)
-				}
-			}()
-			fir := bufio.NewReader(fi)
-			colorTemplate(fir)
-
-		}
-	*/
-
+	
 	fi, _ := os.Stdin.Stat()
 	if (fi.Mode() & os.ModeCharDevice) == 0 {
 		reader := bufio.NewReader(os.Stdin)
 		colorStream(reader, apf)
 	}
 
-	/*
-		outC := make(chan string)
-		fi, _ := os.Stdin.Stat() // get the FileInfo struct describing the standard input.
-
-		if (fi.Mode() & os.ModeCharDevice) == 0 {
-			fmt.Println("data is from pipe")
-
-			// copy the output in a separate goroutine so printing can't block indefinitely
-			go func() {
-				var buf bytes.Buffer
-				io.Copy(&buf, os.Stdin)
-				reader := strings.NewReader(buf.String())
-
-				var ocl string
-				if blueFlag != nil {
-					//apf = append(apf, patternFunc{*blueFlag, ansicolor.BoldBlue})
-					ocl = colorStream(reader, *blueFlag, ansicolor.BoldBlue)
-					reader = strings.NewReader(ocl)
-				}
-				if redFlag != nil {
-					//apf = append(apf, patternFunc{*redFlag, ansicolor.BoldRed})
-					ocl = colorStream(reader, *redFlag, ansicolor.BoldRed)
-					reader = strings.NewReader(ocl)
-				}
-				if greenFlag != nil {
-					//apf = append(apf, patternFunc{*greenFlag, ansicolor.BoldGreen})
-					ocl = colorStream(reader, *greenFlag, ansicolor.BoldGreen)
-					reader = strings.NewReader(ocl)
-				}
-				if yellowFlag != nil {
-					ocl = colorStream(reader, *yellowFlag, ansicolor.BoldYellow)
-					reader = strings.NewReader(ocl)
-				}
-				if magentaFlag != nil {
-					ocl = colorStream(reader, *magentaFlag, ansicolor.BoldMagenta)
-					reader = strings.NewReader(ocl)
-				}
-				if cyanFlag != nil {
-					ocl = colorStream(reader, *cyanFlag, ansicolor.BoldCyan)
-					reader = strings.NewReader(ocl)
-				}
-				if bblueFlag != nil {
-					ocl = colorStream(reader, *bblueFlag, ansicolor.BBlue)
-					reader = strings.NewReader(ocl)
-				}
-				if bredFlag != nil {
-					ocl = colorStream(reader, *bredFlag, ansicolor.BRed)
-					reader = strings.NewReader(ocl)
-				}
-				if bgreenFlag != nil {
-					ocl = colorStream(reader, *bgreenFlag, ansicolor.BGreen)
-					reader = strings.NewReader(ocl)
-				}
-				if byellowFlag != nil {
-					ocl = colorStream(reader, *byellowFlag, ansicolor.BYellow)
-					reader = strings.NewReader(ocl)
-				}
-				if bmagentaFlag != nil {
-					ocl = colorStream(reader, *bmagentaFlag, ansicolor.BMagenta)
-					reader = strings.NewReader(ocl)
-				}
-				if bcyanFlag != nil {
-					ocl = colorStream(reader, *bcyanFlag, ansicolor.BCyan)
-					reader = strings.NewReader(ocl)
-				}
-
-				outC <- ocl
-			}()
-
-		}
-		out := <-outC
-		fmt.Print(out)
-	*/
+	
 
 }
 
@@ -265,25 +172,3 @@ func colorStream(r *bufio.Reader, apf []patternFunc) {
 		fmt.Print(inStr)
 	}
 }
-
-func colorTemplate(r *bufio.Reader) {
-}
-
-/*
-func colorStreamm(r io.Reader, fg string, fcol func(string) string) string {
-	re := regexp.MustCompile(fg)
-	buf := new(bytes.Buffer)
-	_, err := buf.ReadFrom(r)
-	if err != nil {
-		fmt.Printf("read colorStream error: %s\n", err)
-	}
-
-	var out string
-	strings := re.FindAllString(buf.String(), -1)
-	for _, str := range strings {
-		out = re.ReplaceAllString(buf.String(), fcol(str))
-	}
-
-	return out
-}
-*/
